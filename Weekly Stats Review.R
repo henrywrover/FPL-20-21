@@ -52,7 +52,9 @@ setwd(paste("~/R/FPL-20-21/plots/",Sys.Date(), sep = ""))
 stats %>%
   arrange(-xG) %>%
   select(player, xG) %>%
-  top_n(10, xG)
+  top_n(10, xG) %>%
+  mutate(xG = round(xG, 2)) %>%
+  as.data.frame()
 
 ### Who had the most shots?
 
@@ -60,7 +62,8 @@ shots %>%
   group_by(player) %>%
   summarise(shots = n()) %>%
   arrange(-shots) %>%
-  top_n(10)
+  top_n(10) %>%
+  as.data.frame()
 
 ### Who assisted the most shots?
 
@@ -68,14 +71,18 @@ shots %>%
   filter(!is.na(player_assisted)) %>%
   group_by(player_assisted) %>%
   tally(sort = TRUE) %>%
-  top_n(10)
+  top_n(10) %>%
+  rename("Player" = player_assisted, "Passes leading to shot" = n) %>%
+  as.data.frame()
 
 ### Who had the highest xA?
 
 stats %>%
   arrange(-xA) %>%
   top_n(10, xA) %>%
-  select(player, xA)
+  select(player, xA) %>%
+  mutate(xA = round(xA, 2)) %>%
+  as.data.frame()
 
 ### Creating some plots to show xA and xG
 
